@@ -1,3 +1,156 @@
+<div id="party-builder" class="pb-wrap">
+  <h2>Build Your Party Package</h2>
+
+  <!-- STICKY TOTAL (always visible) -->
+  <div class="pb-sticky" id="pbStickyTotal">
+    <div class="pb-sticky-inner">
+      <div>
+        <div class="pb-sticky-label">ESTIMATED TOTAL</div>
+        <div class="pb-sticky-hint">Updates as you pick options</div>
+      </div>
+      <div class="pb-sticky-value" id="pbStickyTotalValue">$0</div>
+      <button type="button" class="pb-btn pb-btn-primary" id="pbStickyReviewBtn">Review / Send</button>
+    </div>
+  </div>
+
+  <!-- STEP 1: DURATION -->
+  <div class="pb-card">
+    <h3 class="pb-title">CHOOSE YOUR PARTY LENGTH</h3>
+
+    <label class="pb-option">
+      <input type="radio" name="pbDuration" value="60 min" data-key="60">
+      <span><strong>60 min</strong></span>
+    </label>
+
+    <label class="pb-option">
+      <input type="radio" name="pbDuration" value="90 min" data-key="90">
+      <span><strong>90 min</strong></span>
+    </label>
+
+    <label class="pb-option">
+      <input type="radio" name="pbDuration" value="2 hours" data-key="120">
+      <span><strong>2 hours</strong></span>
+    </label>
+
+    <label class="pb-option">
+      <input type="radio" name="pbDuration" value="3 hours" data-key="180">
+      <span><strong>3 hours</strong></span>
+    </label>
+  </div>
+
+  <!-- STEP 2: ENTERTAINERS -->
+  <div class="pb-card pb-hiddenblock" id="pbStepEntertainers">
+    <h3 class="pb-title">CHOOSE ENTERTAINERS</h3>
+
+    <label class="pb-field pb-field-inline">
+      How many entertainers?
+      <select id="pbEntertainers">
+        <option value="" selected disabled>Choose…</option>
+        <option value="1">1 entertainer</option>
+        <option value="2">2 entertainers</option>
+      </select>
+      <div class="pb-mini" id="pbPriceLine">Select entertainers to see price.</div>
+    </label>
+  </div>
+
+  <!-- STEP 3: INCLUDED ACTIVITIES -->
+  <div class="pb-card pb-hiddenblock" id="pbStepIncluded">
+    <h3 class="pb-title">CHOOSE INCLUDED ACTIVITY (1 PER ENTERTAINER)</h3>
+
+    <div class="pb-activity-grid" id="pbIncludedGrid">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+  <!-- STEP 4: ADD-ON ACTIVITIES -->
+  <div class="pb-card pb-hiddenblock" id="pbStepAddons">
+    <h3 class="pb-title">ADD-ONS</h3>
+
+    <div class="pb-mini pb-addonhint">
+      Add-on activities are <strong>$40 each</strong>. Photographer add-on is <strong>$175</strong>.
+      <br>
+      <span style="opacity:.8">Included activities will not appear here (no double booking).</span>
+    </div>
+
+    <div id="pbAddonList">
+      <!-- injected by JS -->
+    </div>
+  </div>
+
+  <!-- KIDS (dropdown + subtitle) -->
+  <div class="pb-card pb-hiddenblock" id="pbStepKids">
+    <h3 class="pb-title">APPROX. NUMBER OF KIDS</h3>
+    <div class="pb-subtitle">(Just give it your best guess!)</div>
+
+    <label class="pb-field pb-field-inline">
+      <select id="pbKidsSelect">
+        <option value="" selected disabled>Choose…</option>
+        <option value="Up to 10 kids">Up to 10 kids</option>
+        <option value="11–15 kids">11–15 kids</option>
+        <option value="16–20 kids">16–20 kids</option>
+        <option value="21–25 kids">21–25 kids</option>
+        <option value="26–30 kids">26–30 kids</option>
+        <option value="31+ kids">31+ kids</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- DETAILS (always visible) -->
+  <div class="pb-card" id="pbDetails">
+    <h3 class="pb-title">PARTY DETAILS</h3>
+
+    <div class="pb-grid">
+      <label class="pb-field">
+        Your Name
+        <input type="text" id="pbName" placeholder="Parent/Guardian name" required>
+      </label>
+
+      <label class="pb-field">
+        Email
+        <input type="email" id="pbEmail" placeholder="you@example.com" required>
+      </label>
+
+      <label class="pb-field">
+        Party Date
+        <input type="date" id="pbDate">
+      </label>
+
+      <label class="pb-field">
+        Location
+        <input type="text" id="pbLocation" placeholder="Address or city" required>
+      </label>
+    </div>
+
+    <!-- Travel fees note -->
+    <div class="pb-travel">
+      <strong>Travel Fees:</strong> Travel fees may apply depending on your location. We’ll confirm your final total after reviewing the address.
+    </div>
+
+    <label class="pb-field">
+      Notes (optional)
+      <textarea id="pbNotes" rows="3" placeholder="Theme, ages, special requests..."></textarea>
+    </label>
+  </div>
+
+  <!-- TOTAL + ACTIONS (always visible) -->
+  <div class="pb-total" id="pbActions">
+    <div>
+      <div class="pb-total-label">Estimated Total</div>
+      <div class="pb-total-value" id="pbTotal">$0</div>
+      <div class="pb-fineprint">Final total may change with travel, custom requests, or weekend/holiday rates.</div>
+    </div>
+
+    <div class="pb-actions">
+      <button type="button" class="pb-btn" id="pbDownload">Download Summary</button>
+      <button type="button" class="pb-btn pb-btn-primary" id="pbEmailBtn">Email This Request</button>
+    </div>
+  </div>
+
+  <div class="pb-hidden">
+    <textarea id="pbSummary"></textarea>
+  </div>
+</div>
+
 <!-- ✅ KEEP YOUR EXISTING HTML + JS.
      ONLY REPLACE your <style> block with this one (or copy/paste these additions at the end).
      This sets:
@@ -147,3 +300,351 @@
     background:#fff; /* keep readable */
   }
 </style>
+
+<script>
+(function(){
+  const el = (id)=>document.getElementById(id);
+  const durationRadios = () => Array.from(document.querySelectorAll('input[name="pbDuration"]'));
+
+  function money(n){ return `$${Number(n || 0).toFixed(0)}`; }
+
+  // Pricing table
+  const PRICE_TABLE = {
+    60:  {1: 150, 2: 250},
+    90:  {1: 200, 2: 350},
+    120: {1: 250, 2: 450},
+    180: {1: 350, 2: 650}
+  };
+
+  const ACTIVITIES = [
+    "Balloon Twisting",
+    "Face Painting",
+    "Character Appearances",
+    "Magic Show & Crowning Ceremony",
+    "Games & Dancing"
+  ];
+
+  const ADDON_ACTIVITY_PRICE = 40;
+  const PHOTOGRAPHER_PRICE = 175;
+
+  function showBlock(id, show){
+    const node = el(id);
+    if(!node) return;
+    node.style.display = show ? "block" : "none";
+  }
+
+  function getSelectedDurationMinutes(){
+    const dur = durationRadios().find(r => r.checked);
+    return dur ? Number(dur.dataset.key || 0) : 0;
+  }
+
+  function getDurationLabel(minutes){
+    if(minutes === 60) return "60 min";
+    if(minutes === 90) return "90 min";
+    if(minutes === 120) return "2 hours";
+    if(minutes === 180) return "3 hours";
+    return "—";
+  }
+
+  function getEntertainers(){
+    const v = el('pbEntertainers').value;
+    return v ? Number(v) : 0;
+  }
+
+  function packagePrice(minutes, entertainers){
+    if(!minutes || !entertainers) return 0;
+    return (PRICE_TABLE[minutes] && PRICE_TABLE[minutes][entertainers]) ? PRICE_TABLE[minutes][entertainers] : 0;
+  }
+
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function buildIncludedUI(entertainers){
+    const grid = el('pbIncludedGrid');
+    grid.innerHTML = "";
+
+    for(let i=1; i<=entertainers; i++){
+      const card = document.createElement('div');
+      card.className = "pb-activity-card";
+      card.innerHTML = `
+        <div class="pb-activity-head">Entertainer ${i} — Included Activity</div>
+        <label class="pb-field">
+          <select class="pb-included" data-ent="${i}">
+            <option value="" selected disabled>Choose…</option>
+            ${ACTIVITIES.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join("")}
+          </select>
+        </label>
+      `;
+      grid.appendChild(card);
+    }
+
+    Array.from(document.querySelectorAll('.pb-included')).forEach(sel => {
+      sel.addEventListener('change', function(){
+        rebuildAddonList();
+        updateVisibilityAfterIncluded();
+        calcTotal();
+      });
+    });
+
+    rebuildAddonList();
+    calcTotal();
+  }
+
+  function getIncludedSelections(){
+    const sels = Array.from(document.querySelectorAll('.pb-included'));
+    return sels.map(s => s.value).filter(Boolean);
+  }
+
+  function rebuildAddonList(){
+    const holder = el('pbAddonList');
+    holder.innerHTML = "";
+
+    const included = new Set(getIncludedSelections());
+
+    // Activity add-ons ($40 each), excluding included selections
+    ACTIVITIES.forEach(act => {
+      if(included.has(act)) return;
+
+      const wrap = document.createElement('label');
+      wrap.className = "pb-addon-item";
+      wrap.innerHTML = `
+        <input type="checkbox" class="pb-addon" value="${escapeHtml(act)}" data-price="${ADDON_ACTIVITY_PRICE}">
+        <span><strong>${escapeHtml(act)}</strong> — <span style="opacity:.7">${money(ADDON_ACTIVITY_PRICE)}</span></span>
+      `;
+      holder.appendChild(wrap);
+    });
+
+    // Photographer add-on (always available)
+    const photo = document.createElement('label');
+    photo.className = "pb-addon-item";
+    photo.innerHTML = `
+      <input type="checkbox" class="pb-addon" value="1 hr Photographer" data-price="${PHOTOGRAPHER_PRICE}">
+      <span><strong>1 hr Photographer</strong> — <span style="opacity:.7">${money(PHOTOGRAPHER_PRICE)}</span></span>
+    `;
+    holder.appendChild(photo);
+
+    Array.from(document.querySelectorAll('.pb-addon')).forEach(cb => {
+      cb.addEventListener('change', calcTotal);
+    });
+  }
+
+  function allIncludedChosen(){
+    const ent = getEntertainers();
+    if(!ent) return false;
+    const included = Array.from(document.querySelectorAll('.pb-included')).map(s => s.value);
+    return included.length === ent && included.every(v => !!v);
+  }
+
+  function updateVisibilityAfterDuration(){
+    const minutes = getSelectedDurationMinutes();
+    showBlock('pbStepEntertainers', !!minutes);
+
+    if(!minutes){
+      el('pbEntertainers').value = "";
+      showBlock('pbStepIncluded', false);
+      showBlock('pbStepAddons', false);
+      showBlock('pbStepKids', false);
+      el('pbIncludedGrid').innerHTML = "";
+      el('pbAddonList').innerHTML = "";
+      el('pbKidsSelect').value = "";
+    }
+  }
+
+  function updateVisibilityAfterEntertainers(){
+    const minutes = getSelectedDurationMinutes();
+    const ent = getEntertainers();
+
+    showBlock('pbStepIncluded', !!(minutes && ent));
+    showBlock('pbStepAddons', false);
+    showBlock('pbStepKids', false);
+
+    if(minutes && ent){
+      buildIncludedUI(ent);
+    } else {
+      el('pbIncludedGrid').innerHTML = "";
+      el('pbAddonList').innerHTML = "";
+      el('pbKidsSelect').value = "";
+    }
+  }
+
+  function updateVisibilityAfterIncluded(){
+    const ok = allIncludedChosen();
+    showBlock('pbStepAddons', ok);
+    showBlock('pbStepKids', ok);
+  }
+
+  function getAddonTotal(){
+    const addons = Array.from(document.querySelectorAll('.pb-addon')).filter(c => c.checked);
+    return addons.reduce((sum,c)=> sum + Number(c.dataset.price || 0), 0);
+  }
+
+  function calcTotal(){
+    const minutes = getSelectedDurationMinutes();
+    const ent = getEntertainers();
+
+    const pkg = packagePrice(minutes, ent);
+    const addonTotal = getAddonTotal();
+    const total = pkg + addonTotal;
+
+    el('pbTotal').textContent = money(total);
+    el('pbStickyTotalValue').textContent = money(total);
+
+    if(minutes && ent){
+      el('pbPriceLine').textContent = `Selected package price: ${money(pkg)}`;
+    } else if(minutes && !ent){
+      el('pbPriceLine').textContent = `Select entertainers to see price.`;
+    } else {
+      el('pbPriceLine').textContent = `Select duration to begin.`;
+    }
+
+    el('pbSummary').value = buildSummary({ minutes, ent, pkg, addonTotal, total });
+    return total;
+  }
+
+  function buildSummary(ctx){
+    const name = el('pbName').value.trim();
+    const email = el('pbEmail').value.trim();
+    const date = el('pbDate').value;
+    const location = el('pbLocation').value.trim();
+    const notes = el('pbNotes').value.trim();
+
+    const kidsLabel = el('pbKidsSelect').value || "—";
+    const durLabel = getDurationLabel(ctx.minutes);
+    const entertainersLabel = ctx.ent ? `${ctx.ent} entertainer${ctx.ent === 1 ? "" : "s"}` : "—";
+
+    const included = Array.from(document.querySelectorAll('.pb-included')).map((s, idx) => ({
+      idx: idx+1,
+      value: s.value
+    })).filter(x => x.value);
+
+    const includedLines = included.length
+      ? included.map(x => `- Entertainer ${x.idx}: ${x.value}`)
+      : ["- None selected"];
+
+    const addons = Array.from(document.querySelectorAll('.pb-addon')).filter(c => c.checked);
+    const addonLines = addons.length
+      ? addons.map(a => `- ${a.value} (${money(Number(a.dataset.price || 0))})`)
+      : ["- None"];
+
+    const lines = [];
+    lines.push("PARTY PACKAGE REQUEST");
+    lines.push("—".repeat(28));
+    lines.push(`Name: ${name || "—"}`);
+    lines.push(`Email: ${email || "—"}`);
+    if(date) lines.push(`Party Date: ${date}`);
+    lines.push(`Location: ${location || "—"}`);
+    lines.push("");
+
+    lines.push(`Duration: ${durLabel}`);
+    lines.push(`Entertainers: ${entertainersLabel}`);
+    lines.push(`Package Price: ${money(ctx.pkg)}`);
+
+    lines.push("");
+    lines.push("Included Activities:");
+    includedLines.forEach(l => lines.push(l));
+
+    lines.push("");
+    lines.push(`Approx. Kids: ${kidsLabel}`);
+
+    lines.push("");
+    lines.push("Add-Ons:");
+    addonLines.forEach(l => lines.push(l));
+
+    lines.push("");
+    lines.push(`Add-On Total: ${money(ctx.addonTotal)}`);
+    lines.push(`Estimated Total: ${money(ctx.total)}`);
+    lines.push("");
+    lines.push("Travel Fees: Travel fees may apply depending on your location. We’ll confirm your final total after reviewing the address.");
+    lines.push("");
+    if(notes){
+      lines.push("Notes:");
+      lines.push(notes);
+      lines.push("");
+    }
+    lines.push("Submitted from the website package builder.");
+
+    return lines.join("\n");
+  }
+
+  function validateBasics(){
+    const name = el('pbName').value.trim();
+    const email = el('pbEmail').value.trim();
+    const location = el('pbLocation').value.trim();
+
+    if(!name || !email || !location){
+      alert("Please enter your name, email, and location so we can send you the summary.");
+      return false;
+    }
+    return true;
+  }
+
+  function downloadSummary(){
+    if(!validateBasics()) return;
+    calcTotal();
+    const summary = el('pbSummary').value;
+
+    const blob = new Blob([summary], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "party-package-summary.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    URL.revokeObjectURL(url);
+  }
+
+  function emailSummary(){
+    if(!validateBasics()) return;
+    calcTotal();
+    const summary = el('pbSummary').value;
+
+    const to = "events@magicinthemaking.net";
+    const subject = encodeURIComponent("Party Package Request (Website)");
+    const body = encodeURIComponent(summary);
+
+    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+  }
+
+  // Wire duration step
+  durationRadios().forEach(r => {
+    r.addEventListener('change', function(){
+      updateVisibilityAfterDuration();
+      calcTotal();
+    });
+  });
+
+  // Wire entertainers step
+  el('pbEntertainers').addEventListener('change', function(){
+    updateVisibilityAfterEntertainers();
+    calcTotal();
+  });
+
+  // Kids dropdown update
+  el('pbKidsSelect').addEventListener('change', calcTotal);
+
+  // Review button scroll
+  el('pbStickyReviewBtn').addEventListener('click', function(){
+    el('pbActions').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // Actions
+  el('pbDownload').addEventListener('click', downloadSummary);
+  el('pbEmailBtn').addEventListener('click', emailSummary);
+
+  // Initial state
+  showBlock('pbStepEntertainers', false);
+  showBlock('pbStepIncluded', false);
+  showBlock('pbStepAddons', false);
+  showBlock('pbStepKids', false);
+  calcTotal();
+})();
+</script>
