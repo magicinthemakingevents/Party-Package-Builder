@@ -1,177 +1,118 @@
-<div id="party-builder" class="pb-wrap">
-  <h2>Build Your Party Package</h2>
-
-  <!-- DURATION -->
-  <div class="pb-card">
-    <h3 class="pb-title">CHOOSE YOUR PARTY LENGTH</h3>
-
-    <label class="pb-option">
-      <input type="radio" name="pbDuration" value="60 min" data-price="250" checked>
-      <span><strong>60 min</strong> — <span class="pb-price">$250</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbDuration" value="90 min" data-price="325">
-      <span><strong>90 min</strong> — <span class="pb-price">$325</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbDuration" value="120 min" data-price="400">
-      <span><strong>120 min</strong> — <span class="pb-price">$400</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbDuration" value="150 min" data-price="475">
-      <span><strong>150 min</strong> — <span class="pb-price">$475</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbDuration" value="180 min" data-price="550">
-      <span><strong>180 min (3 hours)</strong> — <span class="pb-price">$550</span></span>
-    </label>
-  </div>
-
-  <!-- KIDS -->
-  <div class="pb-card">
-    <h3 class="pb-title">CHOOSE APPROX. NUMBER OF KIDS</h3>
-
-    <!-- Prices here are placeholders. Update later. -->
-    <label class="pb-option">
-      <input type="radio" name="pbKids" value="Up to 10 kids" data-price="0" checked>
-      <span><strong>Up to 10 kids</strong> — <span class="pb-price">Included</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbKids" value="11–15 kids" data-price="35">
-      <span><strong>11–15 kids</strong> — <span class="pb-price">$35</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbKids" value="16–20 kids" data-price="70">
-      <span><strong>16–20 kids</strong> — <span class="pb-price">$70</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbKids" value="21–25 kids" data-price="110">
-      <span><strong>21–25 kids</strong> — <span class="pb-price">$110</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="radio" name="pbKids" value="26–30 kids" data-price="150">
-      <span><strong>26–30 kids</strong> — <span class="pb-price">$150</span></span>
-    </label>
-  </div>
-
-  <!-- ADD ONS -->
-  <div class="pb-card">
-    <h3 class="pb-title">ADD-ONS</h3>
-
-    <div class="pb-subrow">
-      <div class="pb-subtext">
-        <strong>ENTERTAINERS</strong><br>
-        Base package includes <strong>1 Entertainer</strong>. Add more here.
-      </div>
-
-      <label class="pb-field pb-field-inline">
-        Additional entertainers (0–3)
-        <select id="pbExtraEntertainers">
-          <option value="0" selected>0</option>
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-        <div class="pb-mini">Each additional entertainer: <span class="pb-price">$120</span></div>
-      </label>
-    </div>
-
-    <hr class="pb-hr">
-
-    <label class="pb-option">
-      <input type="checkbox" class="pb-addon" value="Face Painting" data-price="75">
-      <span>Face Painting — <span class="pb-price">$75</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="checkbox" class="pb-addon" value="Balloon Twisting" data-price="60">
-      <span>Balloon Twisting — <span class="pb-price">$60</span></span>
-    </label>
-
-    <label class="pb-option">
-      <input type="checkbox" class="pb-addon" value="Party Favors (set)" data-price="40">
-      <span>Party Favors — <span class="pb-price">$40</span></span>
-    </label>
-  </div>
-
-  <!-- DETAILS -->
-  <div class="pb-card">
-    <h3 class="pb-title">PARTY DETAILS</h3>
-
-    <div class="pb-grid">
-      <label class="pb-field">
-        Your Name
-        <input type="text" id="pbName" placeholder="Parent/Guardian name" required>
-      </label>
-
-      <label class="pb-field">
-        Email
-        <input type="email" id="pbEmail" placeholder="you@example.com" required>
-      </label>
-
-      <label class="pb-field">
-        Party Date (optional)
-        <input type="date" id="pbDate">
-      </label>
-
-      <label class="pb-field">
-        Location (optional)
-        <input type="text" id="pbLocation" placeholder="City or address">
-      </label>
-    </div>
-
-    <label class="pb-field">
-      Notes (optional)
-      <textarea id="pbNotes" rows="3" placeholder="Theme, ages, special requests..."></textarea>
-    </label>
-  </div>
-
-  <!-- TOTAL + ACTIONS -->
-  <div class="pb-total">
-    <div>
-      <div class="pb-total-label">Estimated Total</div>
-      <div class="pb-total-value" id="pbTotal">$0</div>
-      <div class="pb-fineprint">Final total may change with travel, custom requests, or weekend/holiday rates.</div>
-    </div>
-
-    <div class="pb-actions">
-      <button type="button" class="pb-btn" id="pbDownload">Download Summary</button>
-      <button type="button" class="pb-btn pb-btn-primary" id="pbEmailBtn">Email This Request</button>
-    </div>
-  </div>
-
-  <div class="pb-hidden">
-    <textarea id="pbSummary"></textarea>
-  </div>
-</div>
+<!-- ✅ KEEP YOUR EXISTING HTML + JS.
+     ONLY REPLACE your <style> block with this one (or copy/paste these additions at the end).
+     This sets:
+     - Main background: #5792B6
+     - All “box” backgrounds: white
+     - Heart-shaped balloons in #EE6067 behind everything
+-->
 
 <style>
-  #party-builder.pb-wrap{max-width:820px;margin:0 auto;font-family:inherit}
-  .pb-card{border:1px solid rgba(0,0,0,.12);border-radius:16px;padding:18px;margin:14px 0}
+  /* ====== MAIN BACKGROUND + BALLOONS ====== */
+  #party-builder.pb-wrap{
+    max-width:820px;
+    margin:0 auto;
+    font-family:inherit;
+
+    /* Main background */
+    background:#5792B6;
+
+    /* Space around the white cards */
+    padding:22px 14px 26px;
+
+    /* Needed for background balloons layers */
+    position:relative;
+    overflow:hidden;
+    border-radius:20px;
+  }
+
+  /* Heart balloon pattern (behind the cards) */
+  #party-builder.pb-wrap::before,
+  #party-builder.pb-wrap::after{
+    content:"";
+    position:absolute;
+    inset:-40px;
+    z-index:0;
+    pointer-events:none;
+    background-repeat:repeat;
+    opacity:.22;
+    filter: blur(0.2px);
+  }
+
+  /* Layer 1: larger hearts */
+  #party-builder.pb-wrap::before{
+    background-size: 180px 180px;
+    background-position: 0 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none'%3E%3Cpath d='M90 126 C60 104 36 84 36 62 C36 45 49 34 66 34 C78 34 86 40 90 48 C94 40 102 34 114 34 C131 34 144 45 144 62 C144 84 120 104 90 126 Z' fill='%23EE6067' fill-opacity='0.55'/%3E%3Cpath d='M90 126 C60 104 36 84 36 62 C36 45 49 34 66 34 C78 34 86 40 90 48 C94 40 102 34 114 34 C131 34 144 45 144 62 C144 84 120 104 90 126 Z' stroke='%23EE6067' stroke-opacity='0.65' stroke-width='3'/%3E%3Cpath d='M90 126 C90 138 90 150 90 164' stroke='%23EE6067' stroke-opacity='0.6' stroke-width='2'/%3E%3Cpath d='M90 164 C84 170 80 174 76 178' stroke='%23EE6067' stroke-opacity='0.55' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Layer 2: smaller hearts offset for depth */
+  #party-builder.pb-wrap::after{
+    background-size: 120px 120px;
+    background-position: 35px 25px;
+    opacity:.14;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none'%3E%3Cpath d='M60 84 C40 68 24 54 24 40 C24 29 33 22 44 22 C52 22 57 26 60 32 C63 26 68 22 76 22 C87 22 96 29 96 40 C96 54 80 68 60 84 Z' fill='%23EE6067' fill-opacity='0.6'/%3E%3Cpath d='M60 84 C40 68 24 54 24 40 C24 29 33 22 44 22 C52 22 57 26 60 32 C63 26 68 22 76 22 C87 22 96 29 96 40 C96 54 80 68 60 84 Z' stroke='%23EE6067' stroke-opacity='0.65' stroke-width='2.5'/%3E%3Cpath d='M60 84 C60 92 60 101 60 110' stroke='%23EE6067' stroke-opacity='0.55' stroke-width='2'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  /* Keep all your content above the background layers */
+  #party-builder.pb-wrap > *{
+    position:relative;
+    z-index:1;
+  }
+
+  /* ====== WHITE “BOXES” (cards + totals) ====== */
+  .pb-card{
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:16px;
+    padding:18px;
+    margin:14px 0;
+    background:#fff;            /* ✅ force white */
+  }
+
+  .pb-total{
+    display:flex;
+    justify-content:space-between;
+    gap:16px;
+    align-items:center;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:16px;
+    padding:18px;
+    margin-top:14px;
+    background:#fff;            /* ✅ force white */
+  }
+
+  /* Sticky bar stays white too */
+  .pb-sticky-inner{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 14px;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:16px;
+    background:#fff;            /* ✅ force white */
+    box-shadow:0 6px 18px rgba(0,0,0,.06);
+  }
+
+  /* Form controls: keep white background */
+  .pb-field input,
+  .pb-field textarea,
+  .pb-field select{
+    padding:10px 12px;
+    border:1px solid rgba(0,0,0,.2);
+    border-radius:12px;
+    font:inherit;
+    background:#fff;            /* ✅ force white */
+  }
+
+  /* ====== KEEP YOUR EXISTING STYLES BELOW (unchanged) ====== */
   .pb-title{letter-spacing:.08em;text-transform:uppercase;font-size:.95rem;margin:0 0 10px 0;opacity:.85}
   .pb-option{display:flex;gap:12px;align-items:flex-start;padding:10px 10px;border-radius:12px;cursor:pointer}
   .pb-option:hover{background:rgba(0,0,0,.04)}
-  .pb-price{opacity:.75}
   .pb-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .pb-field{display:flex;flex-direction:column;gap:6px;margin-top:10px}
-  .pb-field input,.pb-field textarea,.pb-field select{
-    padding:10px 12px;border:1px solid rgba(0,0,0,.2);border-radius:12px;font:inherit
-  }
-  .pb-field-inline{max-width:320px}
-  .pb-mini{font-size:.85rem;opacity:.7;margin-top:6px}
-  .pb-subrow{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
-  .pb-subtext{max-width:420px;opacity:.85;line-height:1.35}
-  .pb-hr{border:none;border-top:1px solid rgba(0,0,0,.12);margin:14px 0}
-  .pb-total{display:flex;justify-content:space-between;gap:16px;align-items:center;
-    border:1px solid rgba(0,0,0,.12);border-radius:16px;padding:18px;margin-top:14px}
+  .pb-field-inline{max-width:360px}
+  .pb-mini{font-size:.85rem;opacity:.7;margin-top:8px;line-height:1.35}
+  .pb-subtitle{font-size:.9rem;opacity:.7;margin-top:-4px;margin-bottom:10px}
   .pb-total-label{font-size:.95rem;opacity:.7}
   .pb-total-value{font-size:2rem;font-weight:700;line-height:1.1}
   .pb-fineprint{font-size:.85rem;opacity:.7;margin-top:6px;max-width:420px}
@@ -180,144 +121,29 @@
   .pb-btn:hover{filter:brightness(.98)}
   .pb-btn-primary{background:#111;color:#fff;border-color:#111}
   .pb-hidden{display:none}
-  @media (max-width:640px){.pb-grid{grid-template-columns:1fr}.pb-total{flex-direction:column;align-items:flex-start}}
+  .pb-hiddenblock{display:none}
+  @media (max-width:640px){
+    .pb-grid{grid-template-columns:1fr}
+    .pb-total{flex-direction:column;align-items:flex-start}
+  }
+
+  /* Activities layout */
+  .pb-activity-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+  @media (max-width:640px){.pb-activity-grid{grid-template-columns:1fr}}
+  .pb-activity-card{border:1px solid rgba(0,0,0,.12);border-radius:14px;padding:12px;background:#fff}
+  .pb-activity-head{font-weight:700;margin-bottom:8px;}
+  .pb-addon-item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid rgba(0,0,0,.12);border-radius:12px;margin:8px 0;background:#fff}
+  .pb-addon-item:hover{background:rgba(0,0,0,.03)}
+
+  /* Travel note */
+  .pb-travel{
+    margin-top:12px;
+    padding:12px;
+    border:1px dashed rgba(0,0,0,.25);
+    border-radius:12px;
+    font-size:.9rem;
+    opacity:.85;
+    line-height:1.35;
+    background:#fff; /* keep readable */
+  }
 </style>
-
-<script>
-(function(){
-  const el = (id)=>document.getElementById(id);
-
-  const durationRadios = () => Array.from(document.querySelectorAll('input[name="pbDuration"]'));
-  const kidsRadios     = () => Array.from(document.querySelectorAll('input[name="pbKids"]'));
-  const addonChecks    = () => Array.from(document.querySelectorAll('.pb-addon'));
-
-  // EDIT THIS LATER IF YOU WANT:
-  const EXTRA_ENTERTAINER_PRICE = 120;
-
-  function money(n){ return `$${Number(n).toFixed(0)}`; }
-
-  function calcTotal(){
-    const dur = durationRadios().find(r => r.checked);
-    const kids = kidsRadios().find(r => r.checked);
-
-    const durPrice = dur ? Number(dur.dataset.price || 0) : 0;
-    const kidsPrice = kids ? Number(kids.dataset.price || 0) : 0;
-
-    const addons = addonChecks().filter(c => c.checked);
-    const addonsTotal = addons.reduce((sum,c)=> sum + Number(c.dataset.price || 0), 0);
-
-    const extraEntertainers = Number(el('pbExtraEntertainers').value || 0);
-    const entertainersTotal = extraEntertainers * EXTRA_ENTERTAINER_PRICE;
-
-    const total = durPrice + kidsPrice + addonsTotal + entertainersTotal;
-
-    el('pbTotal').textContent = money(total);
-    el('pbSummary').value = buildSummary({
-      total, dur, kids, durPrice, kidsPrice, addons, addonsTotal,
-      extraEntertainers, entertainersTotal
-    });
-
-    return total;
-  }
-
-  function buildSummary(ctx){
-    const name = el('pbName').value.trim();
-    const email = el('pbEmail').value.trim();
-    const date = el('pbDate').value;
-    const location = el('pbLocation').value.trim();
-    const notes = el('pbNotes').value.trim();
-
-    const durName = ctx.dur ? ctx.dur.value : "—";
-    const kidsName = ctx.kids ? ctx.kids.value : "—";
-
-    const addonLines = ctx.addons.length
-      ? ctx.addons.map(a => `- ${a.value} (${money(Number(a.dataset.price||0))})`)
-      : ["- None"];
-
-    const lines = [];
-    lines.push("PARTY PACKAGE REQUEST");
-    lines.push("—".repeat(28));
-    lines.push(`Name: ${name || "—"}`);
-    lines.push(`Email: ${email || "—"}`);
-    if(date) lines.push(`Party Date: ${date}`);
-    if(location) lines.push(`Location: ${location}`);
-    lines.push("");
-
-    lines.push(`Duration: ${durName} (${money(ctx.durPrice)})`);
-    lines.push(`Kids: ${kidsName} (${ctx.kidsPrice ? money(ctx.kidsPrice) : "Included"})`);
-
-    lines.push("");
-    lines.push("Entertainers:");
-    lines.push(`- Included: 1 entertainer`);
-    lines.push(`- Additional entertainers: ${ctx.extraEntertainers} (${money(ctx.entertainersTotal)})`);
-
-    lines.push("");
-    lines.push("Add-Ons:");
-    addonLines.forEach(l => lines.push(l));
-
-    lines.push("");
-    if(notes){
-      lines.push("Notes:");
-      lines.push(notes);
-      lines.push("");
-    }
-
-    lines.push(`Estimated Total: ${money(ctx.total)}`);
-    lines.push("");
-    lines.push("Submitted from the website package builder.");
-
-    return lines.join("\n");
-  }
-
-  function validateBasics(){
-    const name = el('pbName').value.trim();
-    const email = el('pbEmail').value.trim();
-    if(!name || !email){
-      alert("Please enter your name and email so we can send you the summary.");
-      return false;
-    }
-    return true;
-  }
-
-  function downloadSummary(){
-    if(!validateBasics()) return;
-    calcTotal();
-    const summary = el('pbSummary').value;
-
-    const blob = new Blob([summary], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "party-package-summary.txt";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-
-    URL.revokeObjectURL(url);
-  }
-
-  function emailSummary(){
-    if(!validateBasics()) return;
-    calcTotal();
-    const summary = el('pbSummary').value;
-
-    const to = "events@magicinthemaking.net";
-    const subject = encodeURIComponent("Party Package Request (Website)");
-    const body = encodeURIComponent(summary);
-
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
-  }
-
-  // Wire events
-  document.querySelectorAll('#party-builder input, #party-builder textarea, #party-builder select')
-    .forEach(x => x.addEventListener('input', calcTotal));
-
-  el('pbDownload').addEventListener('click', downloadSummary);
-  el('pbEmailBtn').addEventListener('click', emailSummary);
-
-  // Init
-  calcTotal();
-})();
-</script>
-
