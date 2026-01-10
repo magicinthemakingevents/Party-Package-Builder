@@ -101,7 +101,7 @@
 
       <label class="pb-field">
         Email
-        <input type="email" id="pbEmail" placeholder="you@example.com" required>
+        <input type="email" id="pbEmail" placeholder="wonder@woman.com" required>
       </label>
 
       <label class="pb-field">
@@ -132,6 +132,13 @@
       <div class="pb-total-label">Estimated Total</div>
       <div class="pb-total-value" id="pbTotal">$0</div>
       <div class="pb-fineprint">Final total may change with travel, custom requests, or weekend/holiday rates.</div>
+
+      <!-- ✅ COUPON CODE -->
+      <label class="pb-field" style="max-width:320px;margin-top:12px;">
+        Coupon Code
+        <input type="text" id="pbCoupon" placeholder="Enter coupon code">
+        <div class="pb-mini" id="pbCouponMsg"></div>
+      </label>
     </div>
 
     <div class="pb-actions">
@@ -144,18 +151,6 @@
     <textarea id="pbSummary"></textarea>
   </div>
 </div>
-
-<!-- ✅ KEEP YOUR EXISTING HTML + JS.
-     ONLY REPLACE your <style> block with this one (or copy/paste these additions at the end).
-     This sets:
-     - Main background: #5792B6
-     - All “box” backgrounds: white
-     - Heart-shaped balloons in #EE6067 behind everything
--->
-
-<!-- ✅ Replace ONLY your current <style>...</style> block with this one.
-     This is your exact styling, but with the heart-balloon background removed.
--->
 
 <style>
   /* ====== MAIN BACKGROUND (NO BALLOONS) ====== */
@@ -297,6 +292,10 @@
 
   const ADDON_ACTIVITY_PRICE = 40;
   const PHOTOGRAPHER_PRICE = 175;
+
+  // ✅ COUPON SETTINGS (case-insensitive)
+  const COUPON_CODE = "magic 2026";
+  const COUPON_DISCOUNT = 0.10; // 10%
 
   function showBlock(id, show){
     const node = el(id);
@@ -461,7 +460,35 @@
 
     const pkg = packagePrice(minutes, ent);
     const addonTotal = getAddonTotal();
-    const total = pkg + addonTotal;
+    let subtotal = pkg + addonTotal;
+
+    // ✅ Coupon apply (case-insensitive)
+    const couponInput = el('pbCoupon');
+    const couponMsg = el('pbCouponMsg');
+    let discount = 0;
+
+    if(couponInput){
+      const code = couponInput.value.trim().toLowerCase();
+
+      if(code){
+        if(code === COUPON_CODE){
+          discount = subtotal * COUPON_DISCOUNT;
+          if(couponMsg){
+            couponMsg.textContent = "✔ Coupon applied (10% off)";
+            couponMsg.style.color = "green";
+          }
+        } else {
+          if(couponMsg){
+            couponMsg.textContent = "✖ Invalid coupon code";
+            couponMsg.style.color = "#c00";
+          }
+        }
+      } else {
+        if(couponMsg) couponMsg.textContent = "";
+      }
+    }
+
+    const total = subtotal - discount;
 
     el('pbTotal').textContent = money(total);
     el('pbStickyTotalValue').textContent = money(total);
@@ -474,7 +501,7 @@
       el('pbPriceLine').textContent = `Select duration to begin.`;
     }
 
-    el('pbSummary').value = buildSummary({ minutes, ent, pkg, addonTotal, total });
+    el('pbSummary').value = buildSummary({ minutes, ent, pkg, addonTotal, discount, total });
     return total;
   }
 
@@ -503,6 +530,9 @@
       ? addons.map(a => `- ${a.value} (${money(Number(a.dataset.price || 0))})`)
       : ["- None"];
 
+    const couponText = el('pbCoupon') ? el('pbCoupon').value.trim() : "";
+    const couponApplied = couponText && couponText.trim().toLowerCase() === COUPON_CODE;
+
     const lines = [];
     lines.push("PARTY PACKAGE REQUEST");
     lines.push("—".repeat(28));
@@ -529,6 +559,17 @@
 
     lines.push("");
     lines.push(`Add-On Total: ${money(ctx.addonTotal)}`);
+
+    // ✅ Coupon line(s) in summary
+    if(couponText){
+      lines.push(`Coupon Code: ${couponText}${couponApplied ? " (applied)" : " (invalid)"}`);
+    } else {
+      lines.push(`Coupon Code: —`);
+    }
+    if(ctx.discount && ctx.discount > 0){
+      lines.push(`Discount: -${money(ctx.discount)}`);
+    }
+
     lines.push(`Estimated Total: ${money(ctx.total)}`);
     lines.push("");
     lines.push("Travel Fees: Travel fees may apply depending on your location. We’ll confirm your final total after reviewing the address.");
@@ -601,6 +642,9 @@
 
   // Kids dropdown update
   el('pbKidsSelect').addEventListener('change', calcTotal);
+
+  // ✅ Coupon typing updates total live
+  el('pbCoupon')?.addEventListener('input', calcTotal);
 
   // Review button scroll
   el('pbStickyReviewBtn').addEventListener('click', function(){
