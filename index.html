@@ -110,6 +110,11 @@
       </label>
 
       <label class="pb-field">
+        Time of Event
+        <input type="time" id="pbTime">
+      </label>
+
+      <label class="pb-field">
         Location
         <input type="text" id="pbLocation" placeholder="Address or city" required>
       </label>
@@ -509,6 +514,7 @@
     const name = el('pbName').value.trim();
     const email = el('pbEmail').value.trim();
     const date = el('pbDate').value;
+    const time = el('pbTime').value;
     const location = el('pbLocation').value.trim();
     const notes = el('pbNotes').value.trim();
 
@@ -539,6 +545,7 @@
     lines.push(`Name: ${name || "—"}`);
     lines.push(`Email: ${email || "—"}`);
     if(date) lines.push(`Party Date: ${date}`);
+    if(time) lines.push(`Time of Event: ${time}`);
     lines.push(`Location: ${location || "—"}`);
     lines.push("");
 
@@ -642,6 +649,9 @@
 
   // Kids dropdown update
   el('pbKidsSelect').addEventListener('change', calcTotal);
+
+  // Time field updates summary live
+  el('pbTime').addEventListener('input', calcTotal);
 
   // ✅ Coupon typing updates total live
   el('pbCoupon')?.addEventListener('input', calcTotal);
